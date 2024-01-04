@@ -5,3 +5,4 @@ export '/recupera_senha/recupera_senha_widget.dart' show RecuperaSenhaWidget;
 export '/cadastro/cadastro_widget.dart' show CadastroWidget;
 export '/listaleilao/listaleilao_widget.dart' show ListaleilaoWidget;
 export '/editar/editar_widget.dart' show EditarWidget;
+export '/detalhes/detalhes_widget.dart' show DetalhesWidget;

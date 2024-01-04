@@ -115,6 +115,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'paramDocTotal', ParamType.DocumentReference, false, ['casas']),
             paramFoto: params.getParam('paramFoto', ParamType.String),
           ),
+        ),
+        FFRoute(
+          name: 'detalhes',
+          path: '/detalhes',
+          builder: (context, params) => DetalhesWidget(
+            paramNome: params.getParam('paramNome', ParamType.String),
+            paramValor: params.getParam('paramValor', ParamType.double),
+            paramFoto: params.getParam('paramFoto', ParamType.String),
+            idDocumento: params.getParam('idDocumento', ParamType.String),
+            paramDocumentoFull: params.getParam('paramDocumentoFull',
+                ParamType.DocumentReference, false, ['casas']),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

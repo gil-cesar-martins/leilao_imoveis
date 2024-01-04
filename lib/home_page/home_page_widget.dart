@@ -270,8 +270,34 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           ),
                                         ),
                                         FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
+                                          onPressed: () async {
+                                            context.pushNamed(
+                                              'detalhes',
+                                              queryParameters: {
+                                                'paramNome': serializeParam(
+                                                  pageViewCasasRecord.nome,
+                                                  ParamType.String,
+                                                ),
+                                                'paramValor': serializeParam(
+                                                  pageViewCasasRecord.valor,
+                                                  ParamType.double,
+                                                ),
+                                                'paramFoto': serializeParam(
+                                                  pageViewCasasRecord.foto,
+                                                  ParamType.String,
+                                                ),
+                                                'idDocumento': serializeParam(
+                                                  pageViewCasasRecord
+                                                      .reference.id,
+                                                  ParamType.String,
+                                                ),
+                                                'paramDocumentoFull':
+                                                    serializeParam(
+                                                  pageViewCasasRecord.reference,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                              }.withoutNulls,
+                                            );
                                           },
                                           text: 'Mais detalhes',
                                           options: FFButtonOptions(
