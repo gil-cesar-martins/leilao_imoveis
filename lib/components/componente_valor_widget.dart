@@ -96,28 +96,28 @@ class _ComponenteValorWidgetState extends State<ComponenteValorWidget> {
                         color: FlutterFlowTheme.of(context).primary,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).primary,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     errorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedErrorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium,
@@ -130,7 +130,51 @@ class _ComponenteValorWidgetState extends State<ComponenteValorWidget> {
               padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
               child: FFButtonWidget(
                 onPressed: () async {
-                  Navigator.pop(context);
+                  var confirmDialogResponse = await showDialog<bool>(
+                        context: context,
+                        builder: (alertDialogContext) {
+                          return AlertDialog(
+                            title: const Text('Valor do lance'),
+                            content: Text(
+                                'Confirma o valor do lance ? ${_model.textController.text}'),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(alertDialogContext, false),
+                                child: const Text('Não'),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(alertDialogContext, true),
+                                child: const Text('Sim'),
+                              ),
+                            ],
+                          );
+                        },
+                      ) ??
+                      false;
+                  if (confirmDialogResponse) {
+                    setState(() {
+                      FFAppState().novolance =
+                          double.parse(_model.textController.text);
+                    });
+                    Navigator.pop(context);
+                  } else {
+                    return;
+                  }
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Valor informado com sucesso.',
+                        style: TextStyle(
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
+                      ),
+                      duration: const Duration(milliseconds: 4000),
+                      backgroundColor: FlutterFlowTheme.of(context).secondary,
+                    ),
+                  );
                 },
                 text: 'CONFIRMAR',
                 options: FFButtonOptions(

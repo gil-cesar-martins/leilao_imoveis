@@ -1,3 +1,18 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionGroup": "lances",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "idCasa",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "valor",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
 }

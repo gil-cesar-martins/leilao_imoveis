@@ -1,4 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/components/componente_valor_widget.dart';
+import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -125,13 +128,52 @@ class _DetalhesWidgetState extends State<DetalhesWidget> {
                       Padding(
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            widget.paramFoto!,
-                            width: 154.0,
-                            height: 139.0,
-                            fit: BoxFit.cover,
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.fade,
+                                child: FlutterFlowExpandedImageView(
+                                  image: Image.network(
+                                    valueOrDefault<String>(
+                                      widget.paramFoto,
+                                      '0',
+                                    ),
+                                    fit: BoxFit.contain,
+                                  ),
+                                  allowRotation: false,
+                                  tag: valueOrDefault<String>(
+                                    widget.paramFoto,
+                                    '0',
+                                  ),
+                                  useHeroAnimation: true,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: valueOrDefault<String>(
+                              widget.paramFoto,
+                              '0',
+                            ),
+                            transitionOnUserGestures: true,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                valueOrDefault<String>(
+                                  widget.paramFoto,
+                                  '0',
+                                ),
+                                width: 154.0,
+                                height: 139.0,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -167,24 +209,66 @@ class _DetalhesWidgetState extends State<DetalhesWidget> {
                 padding: const EdgeInsetsDirectional.fromSTEB(15.0, 20.0, 15.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    await showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      enableDrag: false,
-                      context: context,
-                      builder: (context) {
-                        return GestureDetector(
-                          onTap: () => _model.unfocusNode.canRequestFocus
-                              ? FocusScope.of(context)
-                                  .requestFocus(_model.unfocusNode)
-                              : FocusScope.of(context).unfocus(),
-                          child: Padding(
-                            padding: MediaQuery.viewInsetsOf(context),
-                            child: const ComponenteValorWidget(),
-                          ),
-                        );
-                      },
-                    ).then((value) => safeSetState(() {}));
+                    var confirmDialogResponse = await showDialog<bool>(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: const Text('Oferecer lance'),
+                              content: const Text('Oferecer um valor de lance:'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext, false),
+                                  child: const Text('Não'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext, true),
+                                  child: const Text('Sim'),
+                                ),
+                              ],
+                            );
+                          },
+                        ) ??
+                        false;
+                    if (confirmDialogResponse) {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        enableDrag: false,
+                        context: context,
+                        builder: (context) {
+                          return GestureDetector(
+                            onTap: () => _model.unfocusNode.canRequestFocus
+                                ? FocusScope.of(context)
+                                    .requestFocus(_model.unfocusNode)
+                                : FocusScope.of(context).unfocus(),
+                            child: Padding(
+                              padding: MediaQuery.viewInsetsOf(context),
+                              child: const ComponenteValorWidget(),
+                            ),
+                          );
+                        },
+                      ).then((value) => safeSetState(() {}));
+
+                      await widget.paramDocumentoFull!
+                          .update(createCasasRecordData(
+                        valor: FFAppState().novolance,
+                      ));
+
+                      await LancesRecord.collection
+                          .doc()
+                          .set(createLancesRecordData(
+                            idUsuario: currentUserUid,
+                            idCasa: widget.idDocumento,
+                            valor: FFAppState().novolance,
+                            nome: currentUserDisplayName,
+                          ));
+                    } else {
+                      return;
+                    }
+
+                    context.pushNamed('listaleilao');
                   },
                   text: 'Dar um lance',
                   icon: const FaIcon(
@@ -211,14 +295,85 @@ class _DetalhesWidgetState extends State<DetalhesWidget> {
                   ),
                 ),
               ),
-              const Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
+              StreamBuilder<List<LancesRecord>>(
+                stream: queryLancesRecord(
+                  queryBuilder: (lancesRecord) => lancesRecord
+                      .where(
+                        'idCasa',
+                        isEqualTo: widget.idDocumento,
+                      )
+                      .orderBy('valor'),
+                ),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).primary,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  List<LancesRecord> columnLancesRecordList = snapshot.data!;
+                  return Column(
                     mainAxisSize: MainAxisSize.max,
-                    children: [],
-                  ),
-                ],
+                    children: List.generate(columnLancesRecordList.length,
+                        (columnIndex) {
+                      final columnLancesRecord =
+                          columnLancesRecordList[columnIndex];
+                      return Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            15.0, 10.0, 15.0, 10.0),
+                        child: Material(
+                          color: Colors.transparent,
+                          elevation: 4.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    columnLancesRecord.nome,
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                  Text(
+                                    formatNumber(
+                                      columnLancesRecord.valor,
+                                      formatType: FormatType.decimal,
+                                      decimalType: DecimalType.commaDecimal,
+                                      currency: 'R\$ ',
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  );
+                },
               ),
             ],
           ),

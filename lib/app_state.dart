@@ -27,6 +27,12 @@ class FFAppState extends ChangeNotifier {
   set status(int value) {
     _status = value;
   }
+
+  double _novolance = 0;
+  double get novolance => _novolance;
+  set novolance(double value) {
+    _novolance = value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

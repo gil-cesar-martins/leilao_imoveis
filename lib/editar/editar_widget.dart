@@ -221,28 +221,28 @@ class _EditarWidgetState extends State<EditarWidget> {
                         color: FlutterFlowTheme.of(context).primary,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: const BorderSide(
                         color: Color(0xB42AF487),
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     errorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedErrorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     suffixIcon:
                         _model.textFieldEditarNomeController!.text.isNotEmpty
@@ -283,28 +283,28 @@ class _EditarWidgetState extends State<EditarWidget> {
                         color: FlutterFlowTheme.of(context).primary,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: const BorderSide(
                         color: Color(0xB42AF487),
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     errorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedErrorBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     suffixIcon: _model
                             .textFieldEditarStatusController!.text.isNotEmpty
